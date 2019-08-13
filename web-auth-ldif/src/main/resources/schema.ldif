@@ -1,0 +1,50 @@
+dn: dc=memorynotfound,dc=com
+objectclass: top
+objectclass: domain
+objectclass: extensibleObject
+dc: memorynotfound
+
+dn: ou=groups,dc=memorynotfound,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: groups
+
+dn: ou=people,dc=memorynotfound,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: people
+
+
+dn: uid=john,ou=people,dc=memorynotfound,dc=com
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: John Doe
+uid: john
+#: secret
+#userPassword: {SHA}5en6G6MezRroT3XKqkdPOmY/BfQ=
+#: 1Ti0)LBrrn
+#userPassword: {SHA}7MuUh0D38Q+35Wm4Ave6MvcEFrE=
+#: john
+userPassword: {SHA}pR3afH/1C2Hq6gRENx9KapMB5QE=
+#: testuser1
+#userPassword: {SHA}vFGoPuoJhG3AJAfdCXmWiRKiB6k=
+
+
+dn: cn=developers,ou=groups,dc=memorynotfound,dc=com
+objectclass: top
+objectclass: groupOfUniqueNames
+cn: developers
+ou: developer
+uniqueMember: uid=john,ou=people,dc=memorynotfound,dc=com
+
+dn: cn=managers,ou=groups,dc=memorynotfound,dc=com
+objectclass: top
+objectclass: groupOfUniqueNames
+cn: managers
+ou: manager
+uniqueMember: uid=john,ou=people,dc=memorynotfound,dc=com
+
+
+# password generator: http://aspirine.org/htpasswd_en.html
