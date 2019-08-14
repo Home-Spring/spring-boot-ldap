@@ -1,6 +1,9 @@
 package dk.digitalidentity;
 
 import java.util.List;
+
+import dk.digitalidentity.app.LdapGroup;
+import dk.digitalidentity.app.LdapGroupRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,12 +22,12 @@ public class Application implements CommandLineRunner {
 	LdapTemplate ldapTemplate;
 
 	public void run(String... args) {
-
+		// /////////////////////////////////////////
 		/**
 		 * AUTHENTICATE
 		 */
-		LdapPersonRepo dao = new LdapPersonRepo();
-		dao.setLdapTemplate(ldapTemplate);
+		LdapPersonRepo personDao = new LdapPersonRepo();
+		personDao.setLdapTemplate(ldapTemplate);
 
 		/**
 		 * get all (ldap) Persons
@@ -35,9 +38,29 @@ public class Application implements CommandLineRunner {
 //		andFilter.and(new EqualsFilter("memberof", "CN=TestGroup,DC=example,DC=org"));
 
 		try {
-			List<LdapPerson> persons = dao.getAllPerson(andFilter);
+			List<LdapPerson> persons = personDao.getAllPerson(andFilter);
 			for (LdapPerson person : persons) {
 				System.out.println(person);
+			}
+		} catch (Exception e) {
+			System.err.println(e);
+		}
+
+		// /////////////////////////////////////////
+		LdapGroupRepo groupDao = new LdapGroupRepo();
+		groupDao.setLdapTemplate(ldapTemplate);
+
+
+		/**
+		 * get all (ldap) Groups
+		 */
+		andFilter = new AndFilter();
+		andFilter.and(new EqualsFilter("objectClass", "person"));
+
+		try {
+			List<LdapGroup> groups = groupDao.getAllGroup(andFilter);
+			for (LdapGroup group : groups) {
+				System.out.println(group);
 			}
 		} catch (Exception e) {
 			System.err.println(e);
