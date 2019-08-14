@@ -20,9 +20,15 @@ public class Application implements CommandLineRunner {
 
 	public void run(String... args) {
 
+		/**
+		 * AUTHENTICATE
+		 */
 		LdapPersonRepo dao = new LdapPersonRepo();
 		dao.setLdapTemplate(ldapTemplate);
 
+		/**
+		 * get all (ldap) Persons
+		 */
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("objectClass", "person"));
 //		andFilter.and(new EqualsFilter("sAMAccountName", "daniel"));
