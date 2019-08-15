@@ -1,6 +1,9 @@
 package dk.digitalidentity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import dk.digitalidentity.app.LdapGroup;
 import dk.digitalidentity.app.LdapGroupRepo;
@@ -37,14 +40,11 @@ public class Application implements CommandLineRunner {
 //		andFilter.and(new EqualsFilter("sAMAccountName", "daniel"));
 //		andFilter.and(new EqualsFilter("memberof", "CN=TestGroup,DC=example,DC=org"));
 
-		try {
-			List<LdapPerson> persons = personDao.getAllPerson(andFilter);
-			for (LdapPerson person : persons) {
-				System.out.println(person);
-			}
-		} catch (Exception e) {
-			System.err.println(e);
-		}
+//		try {
+			for (LdapPerson person : personDao.getAllPerson(andFilter)) System.out.println(person);
+//		} catch (Exception e) {
+//			System.err.println(e);
+//		}
 
 		// /////////////////////////////////////////
 		LdapGroupRepo groupDao = new LdapGroupRepo();
@@ -55,20 +55,38 @@ public class Application implements CommandLineRunner {
 		 * get all (ldap) Groups
 		 */
 		andFilter = new AndFilter();
-		andFilter.and(new EqualsFilter("objectClass", "person"));
+//		andFilter.and(new EqualsFilter("objectClass", "person"));
+		andFilter.and(new EqualsFilter("objectClass", "posixGroup"));
 
-		try {
-			List<LdapGroup> groups = groupDao.getAllGroup(andFilter);
-			for (LdapGroup group : groups) {
-				System.out.println(group);
-			}
-		} catch (Exception e) {
-			System.err.println(e);
-		}
+//		try {
+			for (LdapGroup role : groupDao.getAllGroup(andFilter)) System.out.println(role);
+//		} catch (Exception e) {
+//			System.err.println(e);
+//		}
+
+		// /////////////////////////////////////////
+		String username = "vladare";
+//		String username = "testuser1";
+//		String username = "testuser";
+		StringBuilder sb = new StringBuilder("username: " + username + ";");
+		for (LdapGroup role : groupDao.getAllGroup(andFilter)) if (role.getMemberUids().contains(username)) sb.append(" group: " + role.getCn() + ";");
+		System.out.println(sb);
+
+		System.out.println("username: " + "vladare" + "; groups: " + getGroupsByUsername(groupDao, "vladare").toString() + ";");
+		System.out.println("username: " + "testuser1" + "; groups: " + getGroupsByUsername(groupDao, "testuser1").toString() + ";");
+		System.out.println("username: " + "testuser" + "; groups: " + getGroupsByUsername(groupDao, "testuser").toString() + ";");
 	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
+	static List<String> getGroupsByUsername(LdapGroupRepo groupDao, String username) {
+		AndFilter andFilter = new AndFilter();
+		andFilter.and(new EqualsFilter("objectClass", "posixGroup"));
+
+		List<String> groups = new ArrayList<>();
+		for (LdapGroup role : groupDao.getAllGroup(andFilter)) if (role.getMemberUids().contains(username)) groups.add(role.getCn());
+		return groups;
+	}
 }

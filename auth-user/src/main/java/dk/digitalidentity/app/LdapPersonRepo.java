@@ -21,11 +21,11 @@ public class LdapPersonRepo {
 			@Override
 			public LdapPerson mapFromAttributes(Attributes attr) throws NamingException {
 				LdapPerson person = new LdapPerson();
-				person.setCn((String) attr.get("cn").get());
-				person.setUid((String) attr.get("uid").get());
-				person.setGidNumber((String) attr.get("gidNumber").get());
-				person.setUidNumber((String) attr.get("uidNumber").get());
-				person.setMail((String) attr.get("mail").get());
+				if (attr.get("cn")!=null) person.setCn((String) attr.get("cn").get());
+				if (attr.get("uid")!=null) person.setUid((String) attr.get("uid").get());
+				if (attr.get("gidNumber")!=null) person.setGidNumber((String) attr.get("gidNumber").get());
+				if (attr.get("uidNumber")!=null) person.setUidNumber((String) attr.get("uidNumber").get());
+				if (attr.get("mail")!=null) person.setMail((String) attr.get("mail").get());
 				return person;
 			}
 		});
