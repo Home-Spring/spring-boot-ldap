@@ -1,9 +1,7 @@
 package dk.digitalidentity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 import dk.digitalidentity.app.LdapGroup;
 import dk.digitalidentity.app.LdapGroupRepo;
@@ -40,11 +38,13 @@ public class Application implements CommandLineRunner {
 //		andFilter.and(new EqualsFilter("sAMAccountName", "daniel"));
 //		andFilter.and(new EqualsFilter("memberof", "CN=TestGroup,DC=example,DC=org"));
 
+		System.out.println();
 //		try {
 			for (LdapPerson person : personDao.getAllPerson(andFilter)) System.out.println(person);
 //		} catch (Exception e) {
 //			System.err.println(e);
 //		}
+		System.out.println();
 
 		// /////////////////////////////////////////
 		LdapGroupRepo groupDao = new LdapGroupRepo();
@@ -63,6 +63,7 @@ public class Application implements CommandLineRunner {
 //		} catch (Exception e) {
 //			System.err.println(e);
 //		}
+		System.out.println();
 
 		// /////////////////////////////////////////
 		String username = "vladare";
@@ -71,10 +72,14 @@ public class Application implements CommandLineRunner {
 		StringBuilder sb = new StringBuilder("username: " + username + ";");
 		for (LdapGroup role : groupDao.getAllGroup(andFilter)) if (role.getMemberUids().contains(username)) sb.append(" group: " + role.getCn() + ";");
 		System.out.println(sb);
+		System.out.println();
 
 		System.out.println("username: " + "vladare" + "; groups: " + getGroupsByUsername(groupDao, "vladare").toString() + ";");
 		System.out.println("username: " + "testuser1" + "; groups: " + getGroupsByUsername(groupDao, "testuser1").toString() + ";");
 		System.out.println("username: " + "testuser" + "; groups: " + getGroupsByUsername(groupDao, "testuser").toString() + ";");
+		System.out.println();
+
+		// /////////////////////////////////////////
 	}
 
 	public static void main(String[] args) {
