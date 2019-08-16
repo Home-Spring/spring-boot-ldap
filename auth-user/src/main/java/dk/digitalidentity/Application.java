@@ -2,34 +2,37 @@ package dk.digitalidentity;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import dk.digitalidentity.app.LdapGroup;
 import dk.digitalidentity.app.LdapGroupRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
-
 import dk.digitalidentity.app.LdapPerson;
 import dk.digitalidentity.app.LdapPersonRepo;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.query.SearchScope;
 import org.springframework.ldap.support.LdapUtils;
-
 import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
 	@Autowired
-	LdapContextSource ldapContext2;
+	@Qualifier("userLdapTemplate")
+	LdapTemplate userLdapTemplate;
 
 	@Autowired
-	LdapTemplate ldapTemplate;
+	@Qualifier("roleFasttackLdapTemplate")
+	LdapTemplate roleFasttackLdapTemplate;
+
+	@Autowired
+	@Qualifier("roleLotusLdapTemplate")
+	LdapTemplate roleLotusLdapTemplate;
 
 	public void run(String... args) {
 		// /////////////////////////////////////////
@@ -37,7 +40,7 @@ public class Application implements CommandLineRunner {
 		 * AUTHENTICATE
 		 */
 		LdapPersonRepo personDao = new LdapPersonRepo();
-		personDao.setLdapTemplate(ldapTemplate);
+		personDao.setLdapTemplate(userLdapTemplate);
 
 		/**
 		 * get all (ldap) Persons
@@ -57,7 +60,7 @@ public class Application implements CommandLineRunner {
 
 		// /////////////////////////////////////////
 		LdapGroupRepo groupDao = new LdapGroupRepo();
-		groupDao.setLdapTemplate(ldapTemplate);
+		groupDao.setLdapTemplate(roleFasttackLdapTemplate);
 
 
 		/**
@@ -86,15 +89,11 @@ public class Application implements CommandLineRunner {
 		System.out.println("username: " + "vladare" + "; groups: " + getGroupsByUsername(groupDao, "vladare").toString() + ";");
 		System.out.println("username: " + "testuser1" + "; groups: " + getGroupsByUsername(groupDao, "testuser1").toString() + ";");
 		System.out.println("username: " + "testuser" + "; groups: " + getGroupsByUsername(groupDao, "testuser").toString() + ";");
+		System.out.println("username: " + "test_operator" + "; groups: " + getGroupsByUsername(groupDao, "test_operator").toString() + ";");
 		System.out.println();
 
 		// /////////////////////////////////////////
-//		ldapContext2.setUrl("ldap://192.168.1.100:389");
-//		ldapContext2.setBase("cn=lotus,ou=groups,dc=ninja,dc=cts");
-////		ldapContext2.setBase("cn=lotus");
-//		ldapTemplate.setContextSource(ldapContext2);
-//		groupDao.setLdapTemplate(ldapTemplate);
-
+		groupDao.setLdapTemplate(roleLotusLdapTemplate);
 		LdapQuery query = query()
 				.searchScope(SearchScope.SUBTREE)
 //				.countLimit(10)
@@ -106,6 +105,10 @@ public class Application implements CommandLineRunner {
 //				.and("uid").isPresent();
 
 		for (LdapGroup role : groupDao.getAllGroup(query)) System.out.println(role);
+		System.out.println("username: " + "vladare" + "; groups: " + getGroupsByUsername(groupDao, "vladare").toString() + ";");
+		System.out.println("username: " + "testuser1" + "; groups: " + getGroupsByUsername(groupDao, "testuser1").toString() + ";");
+		System.out.println("username: " + "testuser" + "; groups: " + getGroupsByUsername(groupDao, "testuser").toString() + ";");
+		System.out.println("username: " + "test_operator" + "; groups: " + getGroupsByUsername(groupDao, "test_operator").toString() + ";");
 		System.out.println();
 	}
 
