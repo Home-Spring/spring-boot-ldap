@@ -26,6 +26,7 @@ public class LdapPersonRepo {
 				if (attr.get("gidNumber")!=null) person.setGidNumber((String) attr.get("gidNumber").get());
 				if (attr.get("uidNumber")!=null) person.setUidNumber((String) attr.get("uidNumber").get());
 				if (attr.get("mail")!=null) person.setMail((String) attr.get("mail").get());
+				if (attr.get("sn")!=null) person.setSn((String) attr.get("sn").get());
 				return person;
 			}
 		});

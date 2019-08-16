@@ -13,6 +13,9 @@ public class LdapConfig {
 		LdapContextSource ldapContextSource = new LdapContextSource();
 		ldapContextSource.setUrl("ldap://192.168.1.100:389");
 		ldapContextSource.setBase("dc=ninja,dc=cts");
+//		ldapContextSource.setBase("cn=fasttack,ou=groups,dc=ninja,dc=cts");
+//		ldapContextSource.setBase("cn=lotus,ou=groups,dc=ninja,dc=cts");
+
 //		ldapContextSource.setUserDn("daniel@example");
 //		ldapContextSource.setPassword("Test1234");
 		return ldapContextSource;

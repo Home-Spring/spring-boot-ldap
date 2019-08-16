@@ -7,6 +7,7 @@ public class LdapPerson {
 	private String gidNumber;
 	private String uidNumber;
 	private String mail;
+	private String sn;
 
 	public String getCn() {
 		return cn;
@@ -48,6 +49,14 @@ public class LdapPerson {
 		this.mail = mail;
 	}
 
+	public String getSn() {
+		return sn;
+	}
+
+	public void setSn(String sn) {
+		this.sn = sn;
+	}
+
 	@Override
 	public String toString() {
 		return "LdapPerson{" +
@@ -56,6 +65,7 @@ public class LdapPerson {
 				", gidNumber='" + gidNumber + '\'' +
 				", uidNumber='" + uidNumber + '\'' +
 				", mail='" + mail + '\'' +
+				", sn='" + sn + '\'' +
 				'}';
 	}
 }

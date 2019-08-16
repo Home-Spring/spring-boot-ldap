@@ -10,14 +10,23 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
 
 import dk.digitalidentity.app.LdapPerson;
 import dk.digitalidentity.app.LdapPersonRepo;
+import org.springframework.ldap.query.LdapQuery;
+import org.springframework.ldap.query.SearchScope;
+import org.springframework.ldap.support.LdapUtils;
+
+import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
+
+	@Autowired
+	LdapContextSource ldapContext2;
 
 	@Autowired
 	LdapTemplate ldapTemplate;
@@ -80,6 +89,24 @@ public class Application implements CommandLineRunner {
 		System.out.println();
 
 		// /////////////////////////////////////////
+//		ldapContext2.setUrl("ldap://192.168.1.100:389");
+//		ldapContext2.setBase("cn=lotus,ou=groups,dc=ninja,dc=cts");
+////		ldapContext2.setBase("cn=lotus");
+//		ldapTemplate.setContextSource(ldapContext2);
+//		groupDao.setLdapTemplate(ldapTemplate);
+
+		LdapQuery query = query()
+				.searchScope(SearchScope.SUBTREE)
+//				.countLimit(10)
+//				.attributes("cn")
+//				.base(LdapUtils.emptyLdapName())
+				.where("objectclass").is("posixGroup");
+//				.and("sn").not().is(lastName)
+//				.and("sn").like("j*hn")
+//				.and("uid").isPresent();
+
+		for (LdapGroup role : groupDao.getAllGroup(query)) System.out.println(role);
+		System.out.println();
 	}
 
 	public static void main(String[] args) {
