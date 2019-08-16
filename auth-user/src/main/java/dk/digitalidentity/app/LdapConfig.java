@@ -24,7 +24,8 @@ public class LdapConfig {
 		ldapTemplate.setIgnorePartialResultException(true);
 		ldapTemplate.setContextSource(getContextSource());
 
-		System.out.println("AUTHENTICATE: " + ldapTemplate.authenticate("", "uid=testuser1", "!QAZxcft6")); //TODO:  authenticate = true
+		System.out.println("(testuser1) AUTHENTICATE: " + ldapTemplate.authenticate("", "uid=testuser1", "!QAZxcft6")); //TODO:  authenticate = true
+		System.out.println("(test_operator) AUTHENTICATE: " + ldapTemplate.authenticate("", "uid=test_operator", "test_operator")); //TODO:  authenticate = true
 //		System.out.println("AUTHENTICATE: " + ldapTemplate.authenticate("", "uid=testuser1", "testuser1")); //TODO:  authenticate = false
 
 		return ldapTemplate;
