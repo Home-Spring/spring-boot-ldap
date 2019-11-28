@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
 
@@ -16,38 +17,38 @@ import org.springframework.ldap.core.support.LdapContextSource;
 @Configuration
 public class LdapTemplateConfig {
 
-    public static final String base = "CN=Users,DC=adcts,DC=local";
+    public static final String USERS_BASE = "CN=Users,DC=adcts,DC=local";
 
-    private final String url = "ldap://192.168.1.125:389";
+    private final String AD_URL = "ldap://192.168.1.125:389";
+
     private final Logger log = LoggerFactory.getLogger(LdapTemplateConfig.class);
 
-    @Bean(name = "contextSource")
-    // @Scope("singleton")
-    public LdapContextSource getUserContext() {
-        if (isConfigurationValid(url, base)) {
+    @Bean(name = "usersContextSource")
+//    @Scope("singleton")
+    public LdapContextSource getUsersContext() {
+//        if (isConfigurationValid(AD_URL, base)) {
             LdapContextSource ldapContextSource = new LdapContextSource();
-            ldapContextSource.setUrl(url);
-            ldapContextSource.setBase(base);
+            ldapContextSource.setUrl(AD_URL);
+            ldapContextSource.setBase(USERS_BASE);
             ldapContextSource.setReferral("follow");
             // lcs.setPooled(false);
             // lcs.setDirObjectFactory(DefaultDirObjectFactory.class);
             ldapContextSource.afterPropertiesSet();
             return ldapContextSource;
-        }
-        return null;
+//        }
+//        return null;
     }
 
-    @Bean(name = "ldapTemplate")
-    // @Scope("singleton")
-    public LdapTemplate ldapTemplate() {
-        LdapTemplate ldapTemplate = new LdapTemplate(getUserContext());
+    @Bean(name = "usersLdapTemplate")
+//    @Scope("singleton")
+    public LdapTemplate usersLdapTemplate() {
+        LdapTemplate ldapTemplate = new LdapTemplate(getUsersContext());
         return ldapTemplate;
     }
 
-    public boolean isConfigurationValid(String url, String base) {
+    boolean isConfigurationValid(String url, String base) {
         if ((url == null) || url.isEmpty() || (base == null) || base.isEmpty()) {
             log.error("Warning! Your LDAP server is not configured.");
-            log.info("Did you configure your LDAP settings in your application.yml?");
             return false;
         } else {
             return true;

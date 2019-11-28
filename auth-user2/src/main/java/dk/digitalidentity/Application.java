@@ -20,22 +20,9 @@ import static org.springframework.ldap.query.LdapQueryBuilder.query;
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
-
-	@Autowired
-	LdapTemplate ldapTemplate;
-
-	@Autowired
-	private LDAPServiceImpl lDAPServiceImpl;
-
-	// /////////////////////////////////////////
-
 	@Autowired
 	@Qualifier("userLdapTemplate")
 	LdapTemplate userLdapTemplate;
-
-//	@Autowired
-//	@Qualifier("ldapADTemplate")
-//	LdapTemplate ldapADTemplate;
 
 	@Autowired
 	@Qualifier("roleFasttackLdapTemplate")
@@ -44,6 +31,11 @@ public class Application implements CommandLineRunner {
 	@Autowired
 	@Qualifier("roleLotusLdapTemplate")
 	LdapTemplate roleLotusLdapTemplate;
+
+	// /////////////////////////////////////////
+
+	@Autowired
+	private LDAPServiceImpl lDAPServiceImpl;
 
 	public void run(String... args) {
 
@@ -54,12 +46,12 @@ public class Application implements CommandLineRunner {
 		 * AUTHENTICATE (2)
 		 * Authenticate + get User(s)
 		 */
-		boolean isAuthenticate = lDAPServiceImpl.authenticate("user1", "Qwerty12");
-		System.out.println("(admin) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = false
+		boolean isAuthenticate = lDAPServiceImpl.authenticate("blablabla", "Qwerty1");
+		System.out.println("(blablabla) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = false
 		System.out.println();
 
 		isAuthenticate = lDAPServiceImpl.authenticate("user1", "Qwerty1");
-		System.out.println("(admin) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = true
+		System.out.println("(user1) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = true
 		System.out.println();
 
 		if (isAuthenticate) {
