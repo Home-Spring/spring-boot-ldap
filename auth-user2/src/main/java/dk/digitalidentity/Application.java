@@ -33,6 +33,10 @@ public class Application implements CommandLineRunner {
 	@Qualifier("userLdapTemplate")
 	LdapTemplate userLdapTemplate;
 
+//	@Autowired
+//	@Qualifier("ldapADTemplate")
+//	LdapTemplate ldapADTemplate;
+
 	@Autowired
 	@Qualifier("roleFasttackLdapTemplate")
 	LdapTemplate roleFasttackLdapTemplate;
@@ -48,9 +52,13 @@ public class Application implements CommandLineRunner {
 
 		/**
 		 * AUTHENTICATE (2)
+		 * Authenticate + get User(s)
 		 */
 		User user1 = lDAPServiceImpl.getUserDetails("user1");
-		System.out.println(user1.toString());
+		if (user1!=null) System.out.println(user1.toString());
+
+		List<User> users = lDAPServiceImpl.getUsersDetails("user1");
+		for (User user: users) System.out.println(user.toString());
 
 		System.out.println("||||||||||||||||||||||||||||");
 		// /////////////////////////////////////////

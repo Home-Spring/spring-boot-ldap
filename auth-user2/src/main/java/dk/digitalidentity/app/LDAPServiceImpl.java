@@ -5,16 +5,28 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ldap.AuthenticationException;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.stereotype.Service;
 
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static dk.digitalidentity.app.LdapTemplateConfig.base;
+import static org.springframework.ldap.query.LdapQueryBuilder.query;
+
+/**
+ * @see https://stackoverflow.com/questions/36030518/spring-boot-active-directory-ldap-connection
+ *      http://qaru.site/questions/11600059/spring-boot-active-directoryldap-connection
+ *      https://www.oipapio.com/question-6285180
+ */
 
 @Service
 public class LDAPServiceImpl {
@@ -24,23 +36,58 @@ public class LDAPServiceImpl {
     @Autowired
     LdapTemplate ldapTemplate;
 
+    boolean authenticate(String userDn, String filter, String password) {
+        try {
+            LdapContextSource ldapContextSource = (LdapContextSource) ldapTemplate.getContextSource();
+            ldapContextSource.setUserDn(userDn);
+            ldapContextSource.setPassword(password);
+            ldapTemplate.setContextSource(ldapContextSource);
+
+            return ldapTemplate.authenticate("", filter, password);
+        } catch (AuthenticationException ae) { }
+        return false;
+    }
+
+//    public User getUserDetails(String userName) {
+////        System.out.println("(user1) AUTHENTICATE: " + authenticate("CN=user1,CN=Users,DC=adcts,DC=local", "CN=user1", "Qwerty1")); //TODO:  authenticate = true
+////        System.out.println("(user1) AUTHENTICATE: " + authenticate("CN=user1,CN=Users,DC=adcts,DC=local", "CN=user12", "Qwerty1")); //TODO:  authenticate = false
+//        final String _filter = "CN=" + userName;
+//        boolean isAuthenticate = authenticate(_filter + "," + base, _filter, "Qwerty1");
+//        System.out.println("(user1) AUTHENTICATE: " + isAuthenticate);
+//
+//        if (isAuthenticate) {
+//            AndFilter filter = new AndFilter();
+//            filter.and(new EqualsFilter("objectclass", "person"));
+//            List<User> users = ldapTemplate.search("", filter.encode(), new UaserAttributesMapper());
+//            if (!users.isEmpty()) return users.get(0);
+//        }
+//        return null;
+//    }
+
     public User getUserDetails(String userName) {
-        AndFilter filter = new AndFilter();
-        filter.and(new EqualsFilter("objectclass", "person"));
-        List<User> users = ldapTemplate.search("", filter.encode(), new UaserAttributesMapper());
-        if (!users.isEmpty()) {
-            return users.get(0);
+        final String _filter = "CN=" + userName;
+        boolean isAuthenticate = authenticate(_filter + "," + base, _filter, "Qwerty1");
+        System.out.println("(user1) AUTHENTICATE: " + isAuthenticate);
+
+        if (isAuthenticate) {
+            List<User> list = ldapTemplate.search(query().where("sAMAccountName").is(userName), new UaserAttributesMapper());
+            if ((list != null) && !list.isEmpty()) return list.get(0);
         }
         return null;
+    }
 
-        // List<User> list =
-        // ldapTemplate.search(query().where("sAMAccountName").is("a.keskempes"),
-        // new UserAttributesMapper());
-        // if ((list != null) && !list.isEmpty()) {
-        // return list.get(0);
-        // }
-        // return null;
+    public List<User> getUsersDetails(String userName) {
+        final String _filter = "CN=" + userName;
+        boolean isAuthenticate = authenticate(_filter + "," + base, _filter, "Qwerty1");
+        System.out.println("(user1) AUTHENTICATE: " + isAuthenticate);
 
+        if (isAuthenticate) {
+            AndFilter filter = new AndFilter();
+            filter.and(new EqualsFilter("objectclass", "person"));
+            List<User> users = ldapTemplate.search("", filter.encode(), new UaserAttributesMapper());
+            if (!users.isEmpty()) return users;
+        }
+        return new ArrayList<>();
     }
 
     private class UaserAttributesMapper implements AttributesMapper<User> {

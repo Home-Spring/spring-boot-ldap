@@ -16,27 +16,18 @@ import org.springframework.ldap.core.support.LdapContextSource;
 @Configuration
 public class LdapTemplateConfig {
 
-    private final Logger log = LoggerFactory.getLogger(LdapTemplateConfig.class);
+    public static final String base = "CN=Users,DC=adcts,DC=local";
 
-    @Bean(name = "ldapTemplate")
-    // @Scope("singleton")
-    public LdapTemplate ldapTemplate() {
-        LdapTemplate ldapTemplate = new LdapTemplate(ldapContextSource());
-        return ldapTemplate;
-    }
+    private final String url = "ldap://192.168.1.125:389";
+    private final Logger log = LoggerFactory.getLogger(LdapTemplateConfig.class);
 
     @Bean(name = "contextSource")
     // @Scope("singleton")
     public LdapContextSource ldapContextSource() {
-        String url = "ldap://192.168.1.125:389";
-        String base = "CN=Users,DC=adcts,DC=local";
-
         if (isConfigurationValid(url, base)) {
             LdapContextSource ldapContextSource = new LdapContextSource();
             ldapContextSource.setUrl(url);
             ldapContextSource.setBase(base);
-            ldapContextSource.setUserDn("CN=user1,CN=Users,DC=adcts,DC=local");
-            ldapContextSource.setPassword("Qwerty1");
             ldapContextSource.setReferral("follow");
             // lcs.setPooled(false);
             // lcs.setDirObjectFactory(DefaultDirObjectFactory.class);
@@ -44,6 +35,13 @@ public class LdapTemplateConfig {
             return ldapContextSource;
         }
         return null;
+    }
+
+    @Bean(name = "ldapTemplate")
+    // @Scope("singleton")
+    public LdapTemplate ldapTemplate() {
+        LdapTemplate ldapTemplate = new LdapTemplate(ldapContextSource());
+        return ldapTemplate;
     }
 
     public boolean isConfigurationValid(String url, String base) {
