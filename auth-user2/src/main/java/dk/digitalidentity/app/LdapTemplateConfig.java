@@ -23,7 +23,7 @@ public class LdapTemplateConfig {
 
     @Bean(name = "contextSource")
     // @Scope("singleton")
-    public LdapContextSource ldapContextSource() {
+    public LdapContextSource getUserContext() {
         if (isConfigurationValid(url, base)) {
             LdapContextSource ldapContextSource = new LdapContextSource();
             ldapContextSource.setUrl(url);
@@ -40,7 +40,7 @@ public class LdapTemplateConfig {
     @Bean(name = "ldapTemplate")
     // @Scope("singleton")
     public LdapTemplate ldapTemplate() {
-        LdapTemplate ldapTemplate = new LdapTemplate(ldapContextSource());
+        LdapTemplate ldapTemplate = new LdapTemplate(getUserContext());
         return ldapTemplate;
     }
 

@@ -54,11 +54,19 @@ public class Application implements CommandLineRunner {
 		 * AUTHENTICATE (2)
 		 * Authenticate + get User(s)
 		 */
-		User user1 = lDAPServiceImpl.getUserDetails("user1");
-		if (user1!=null) System.out.println(user1.toString());
+		boolean isAuthenticate = lDAPServiceImpl.authenticate("user1", "Qwerty12");
+		System.out.println("(admin) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = false
 
-		List<User> users = lDAPServiceImpl.getUsersDetails("user1");
-		for (User user: users) System.out.println(user.toString());
+		isAuthenticate = lDAPServiceImpl.authenticate("user1", "Qwerty1");
+		System.out.println("(admin) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = true
+
+		if (isAuthenticate) {
+			User user1 = lDAPServiceImpl.getUserDetails("user2");
+			if (user1 != null) System.out.println(user1.toString());
+
+			List<User> users = lDAPServiceImpl.getUsersDetails();
+			for (User user : users) System.out.println(user.toString());
+		}
 
 		System.out.println("||||||||||||||||||||||||||||");
 		// /////////////////////////////////////////
