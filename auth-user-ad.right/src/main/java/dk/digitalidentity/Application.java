@@ -12,6 +12,7 @@ import org.springframework.ldap.filter.EqualsFilter;
 
 import dk.digitalidentity.app.LdapPerson;
 import dk.digitalidentity.app.PersonRepo;
+import org.springframework.ldap.filter.LikeFilter;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
@@ -28,15 +29,15 @@ public class Application implements CommandLineRunner {
 		test1(dao);
 
 		test2(dao);
-		System.out.println();
 
 		test3(dao);
-		System.out.println();
 
 		test4(dao);
-		System.out.println();
 
 		test5(dao);
+
+		test6_1(dao);
+		test6_2(dao);
 
 		System.out.println("|||||||||||||||||||||||||||");
 	}
@@ -88,6 +89,26 @@ public class Application implements CommandLineRunner {
 		andFilter.and(new EqualsFilter("member", "CN=user4,CN=Users,DC=adcts,DC=local"));
 
 		List<LdapPerson> allPerson = dao.getAllPerson(andFilter);
+		for (LdapPerson p : allPerson) System.out.println(p.getCn());
+	}
+
+	void test6_1(PersonRepo dao) {
+		System.out.println("\nSearch Group(s) by User=user2 in OU=ctsuser:\n----------------");
+
+		AndFilter andFilter = new AndFilter();
+		andFilter.and(new EqualsFilter("member", "CN=user2,CN=Users,DC=adcts,DC=local"));
+		List<LdapPerson> allPerson = dao.getAllPerson("OU=ctsuser", andFilter);
+
+		for (LdapPerson p : allPerson) System.out.println(p.getCn());
+	}
+
+	void test6_2(PersonRepo dao) {
+		System.out.println("\nSearch Group(s) by User=user2 in OU=Ctsprog:\n----------------");
+
+		AndFilter andFilter = new AndFilter();
+		andFilter.and(new EqualsFilter("member", "CN=user2,CN=Users,DC=adcts,DC=local"));
+		List<LdapPerson> allPerson = dao.getAllPerson("OU=Ctsprog", andFilter);
+
 		for (LdapPerson p : allPerson) System.out.println(p.getCn());
 	}
 

@@ -27,4 +27,14 @@ public class PersonRepo {
 		});
 	}
 
+	public List<LdapPerson> getAllPerson(String base, Filter filter) {
+		return ldapTemplate.search(base, filter.encode(), new AttributesMapper() {
+			@Override
+			public LdapPerson mapFromAttributes(Attributes attr) throws NamingException {
+				LdapPerson person = new LdapPerson();
+				person.setCn((String) attr.get("cn").get());
+				return person;
+			}
+		});
+	}
 }
