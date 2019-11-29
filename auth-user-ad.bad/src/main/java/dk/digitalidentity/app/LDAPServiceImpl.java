@@ -40,11 +40,11 @@ public class LDAPServiceImpl {
 
     public boolean authenticate(String userName, String password) {
         final String filter = "CN=" + userName;
-        final String userDn = filter + "," + USERS_BASE;
+//        final String userDn = filter + "," + USERS_BASE;
 
         try {
             LdapContextSource ldapContextSource = (LdapContextSource) usersLdapTemplate.getContextSource();
-            ldapContextSource.setUserDn(userDn);
+            ldapContextSource.setUserDn(userName); // ldapContextSource.setUserDn(userDn);
             ldapContextSource.setPassword(password);
             usersLdapTemplate.setContextSource(ldapContextSource);
 
