@@ -1,10 +1,11 @@
-package dk.digitalidentity.app;
+package dk.digitalidentity.app.dao;
 
 import java.util.List;
 
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
+import dk.digitalidentity.app.data.LdapPerson;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.filter.Filter;

@@ -1,4 +1,4 @@
-package dk.digitalidentity.app;
+package dk.digitalidentity.app.data;
 
 public class LdapPerson {
 private String cn;

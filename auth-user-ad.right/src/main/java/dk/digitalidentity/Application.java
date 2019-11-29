@@ -3,6 +3,7 @@ package dk.digitalidentity;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,19 +13,19 @@ import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
 
-import dk.digitalidentity.app.LdapPerson;
-import dk.digitalidentity.app.PersonRepo;
-import org.springframework.ldap.filter.LikeFilter;
+import dk.digitalidentity.app.data.LdapPerson;
+import dk.digitalidentity.app.dao.PersonRepo;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
 	@Autowired
-	LdapTemplate ldapTemplate;
+	@Qualifier("adLdapTemplate")
+	LdapTemplate adLdapTemplate;
 
 	public void run(String... args) {
 		PersonRepo dao = new PersonRepo();
-		dao.setLdapTemplate(ldapTemplate);
+		dao.setLdapTemplate(adLdapTemplate);
 
 		boolean isAuthenticate = authenticate("", "CN=user2", "Qwerty12");
 		System.out.println("(user2) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = false
@@ -52,11 +53,11 @@ public class Application implements CommandLineRunner {
 
 	boolean authenticate(String base, String filter, String password) {
 		try {
-			LdapContextSource ldapContextSource = (LdapContextSource) ldapTemplate.getContextSource();
+			LdapContextSource ldapContextSource = (LdapContextSource) adLdapTemplate.getContextSource();
 			ldapContextSource.setUserDn("user1@adcts.local");
 			ldapContextSource.setPassword(password);
-			ldapTemplate.setContextSource(ldapContextSource);
-			return ldapTemplate.authenticate(base, filter, password);
+			adLdapTemplate.setContextSource(ldapContextSource);
+			return adLdapTemplate.authenticate(base, filter, password);
 		} catch (AuthenticationException ae) { }
 		return false;
 	}
