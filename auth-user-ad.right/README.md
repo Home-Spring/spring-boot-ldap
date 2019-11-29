@@ -6,7 +6,7 @@
 * [Spring LDAP Обзор](https://www.codeflow.site/ru/article/spring-ldap)
 * [Integrate LDAP and Active Directory (AD)](https://auth0.com/blog/using-ldap-with-c-sharp/)
 * [Spring boot - security java config - LDAP](https://coderanch.com/t/653961/frameworks/Spring-boot-security-java-config)
-
+* http://inflinx.com/ldap/chapter/practicalldapsample.pdf
 ---
 
 [Configuring Active Directory (AD)](https://rancher.com/docs/rancher/v2.x/en/admin-settings/authentication/ad/)
