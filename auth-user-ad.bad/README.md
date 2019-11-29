@@ -5,3 +5,5 @@
 # password generator
 
 * http://aspirine.org/htpasswd_en.html
+
+* http://inflinx.com/ldap/chapter/practicalldapsample.pdf
