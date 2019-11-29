@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.ldap.AuthenticationException;
 import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
 
@@ -24,22 +26,39 @@ public class Application implements CommandLineRunner {
 		PersonRepo dao = new PersonRepo();
 		dao.setLdapTemplate(ldapTemplate);
 
-		System.out.println("|||||||||||||||||||||||||||");
+		boolean isAuthenticate = authenticate("", "CN=user2", "Qwerty12");
+		System.out.println("(user2) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = false
 
-		test1(dao);
-
-		test2(dao);
-
-		test3(dao);
-
-		test4(dao);
-
-		test5(dao);
-
-		test6_1(dao);
-		test6_2(dao);
+		isAuthenticate = authenticate("", "CN=user2", "Qwerty1");
+		System.out.println("(user2) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = true
 
 		System.out.println("|||||||||||||||||||||||||||");
+		if (isAuthenticate) {
+			test1(dao);
+
+			test2(dao);
+
+			test3(dao);
+
+			test4(dao);
+
+			test5(dao);
+
+			test6_1(dao);
+			test6_2(dao);
+		}
+		System.out.println("|||||||||||||||||||||||||||");
+	}
+
+	boolean authenticate(String base, String filter, String password) {
+		try {
+			LdapContextSource ldapContextSource = (LdapContextSource) ldapTemplate.getContextSource();
+			ldapContextSource.setUserDn("user1@adcts.local");
+			ldapContextSource.setPassword(password);
+			ldapTemplate.setContextSource(ldapContextSource);
+			return ldapTemplate.authenticate(base, filter, password);
+		} catch (AuthenticationException ae) { }
+		return false;
 	}
 
 	void test1(PersonRepo dao) {
