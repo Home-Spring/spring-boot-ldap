@@ -3,10 +3,13 @@
 * `spring-boot-minimal` https://github.com/danielcft/spring-boot-ldap-example
     * [Использование протокола LDAP в скриптах](http://www.script-coding.com/Python/LDAP.html)
     * [Active Directory: Использование LDAP-фильтров](https://bga68.livejournal.com/24636.html)
+    * http://inflinx.com/ldap/chapter/practicalldapsample.pdf
+    * https://docs.spring.io/spring-ldap/docs/1.3.2.RELEASE/reference/html/basic.html
+    * https://www.javatips.net/api/org.springframework.ldap.filter.equalsfilter
 * [Spring LDAP Обзор](https://www.codeflow.site/ru/article/spring-ldap)
 * [Integrate LDAP and Active Directory (AD)](https://auth0.com/blog/using-ldap-with-c-sharp/)
 * [Spring boot - security java config - LDAP](https://coderanch.com/t/653961/frameworks/Spring-boot-security-java-config)
-* http://inflinx.com/ldap/chapter/practicalldapsample.pdf
+
 ---
 
 [Configuring Active Directory (AD)](https://rancher.com/docs/rancher/v2.x/en/admin-settings/authentication/ad/)
