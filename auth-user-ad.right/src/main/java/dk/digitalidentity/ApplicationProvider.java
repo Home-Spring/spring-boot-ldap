@@ -37,13 +37,13 @@ public class ApplicationProvider implements CommandLineRunner {
 
 			test3();
 
-			test4();
+			test4(ADLdapConfig.BASE_USERDIR);
 
-            test5_1("user2");
+            test5_1("user2", ADLdapConfig.BASE_USERDIR);
 
-            test5_2("user2");
+            test5_2("user2", ADLdapConfig.BASE_USERDIR);
 
-			test6("user4");
+			test6("user4", ADLdapConfig.BASE_USERDIR);
 		}
 		System.out.println("|||||||||||||||||||||||||||");
 
@@ -85,41 +85,41 @@ public class ApplicationProvider implements CommandLineRunner {
 		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
-	void test4() {
+	void test4(String baseUserDir) {
 		System.out.println("\n4) Search Group(s) by User=user1:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
-		andFilter.and(new EqualsFilter("member", "CN=user1," + ADLdapConfig.BASE_USERDIR + "," + ADLdapConfig.ROOT_DIR));
+		andFilter.and(new EqualsFilter("member", "CN=user1," + baseUserDir + "," + ADLdapConfig.ROOT_DIR));
 
         List<ADLdap> groups = adLdapService.getAll(andFilter);
 		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
-	void test5_1(String userName) {
+	void test5_1(String userName, String baseUserDir) {
 		System.out.println("\n5.1) * Search Group(s) by User=user2 in OU=ctsuser:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
-		andFilter.and(new EqualsFilter("member", "CN=" + userName + "," + ADLdapConfig.BASE_USERDIR + "," + ADLdapConfig.ROOT_DIR));
+		andFilter.and(new EqualsFilter("member", "CN=" + userName + "," + baseUserDir + "," + ADLdapConfig.ROOT_DIR));
 
         List<ADLdap> groups = adLdapService.getAll(ADLdapConfig.ROLE_NAMES2, andFilter);
 		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
-	void test5_2(String userName) {
+	void test5_2(String userName, String baseUserDir) {
 		System.out.println("\n5.2) * Search Group(s) by User=user2 in OU=Ctsprog:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
-		andFilter.and(new EqualsFilter("member", "CN=" + userName + "," + ADLdapConfig.BASE_USERDIR + "," + ADLdapConfig.ROOT_DIR));
+		andFilter.and(new EqualsFilter("member", "CN=" + userName + "," + baseUserDir + "," + ADLdapConfig.ROOT_DIR));
 
         List<ADLdap> groups = adLdapService.getAll(ADLdapConfig.ROLE_NAMES1, andFilter);
 		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
-    void test6(String userName) {
+    void test6(String userName, String baseUserDir) {
         System.out.println("\n6) * Search Group(s) by User=user4 in OU=Ctsprog:\n----------------");
 
         AndFilter andFilter = new AndFilter();
-        andFilter.and(new EqualsFilter("member", "CN=" + userName + "," + ADLdapConfig.BASE_USERDIR + "," + ADLdapConfig.ROOT_DIR));
+        andFilter.and(new EqualsFilter("member", "CN=" + userName + "," + baseUserDir + "," + ADLdapConfig.ROOT_DIR));
 
         List<ADLdap> groups = adLdapService.getAll(ADLdapConfig.ROLE_NAMES1, andFilter);
         for (ADLdap group : groups) System.out.println(group.getCn());
