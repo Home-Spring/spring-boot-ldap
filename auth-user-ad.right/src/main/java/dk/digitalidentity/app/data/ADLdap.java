@@ -1,6 +1,6 @@
 package dk.digitalidentity.app.data;
 
-public class ADLdapPerson {
+public class ADLdap {
 private String cn;
 
 public String getCn() {

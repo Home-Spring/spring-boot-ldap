@@ -28,8 +28,7 @@ public class ActiveDirectoryHelper {
 			return false;
 		}
 		finally {
-			// It is imperative that the created DirContext instance is always
-			// closed
+			// It is imperative that the created DirContext instance is always closed
 			LdapUtils.closeContext(ctx);
 		}
 	}

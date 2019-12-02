@@ -15,8 +15,8 @@ import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
 
-import dk.digitalidentity.app.data.ADLdapPerson;
-import dk.digitalidentity.app.dao.ADPersonDao;
+import dk.digitalidentity.app.data.ADLdap;
+import dk.digitalidentity.app.dao.ADLdapDao;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
@@ -26,7 +26,7 @@ public class Application implements CommandLineRunner {
 	LdapTemplate adLdapTemplate;
 
     public void run(String... args) {
-		ADPersonDao dao = new ADPersonDao();
+		ADLdapDao dao = new ADLdapDao();
 		dao.setLdapTemplate(adLdapTemplate);
 
 		boolean isAuthenticate = authenticate("", "user2", "Qwerty12");
@@ -45,10 +45,11 @@ public class Application implements CommandLineRunner {
 
 			test4(dao);
 
-			test5(dao);
+            test5_1(dao);
 
-			test6_1(dao);
-			test6_2(dao);
+            test5_2(dao);
+
+			test6(dao);
 		}
 		System.out.println("|||||||||||||||||||||||||||");
 
@@ -84,77 +85,77 @@ public class Application implements CommandLineRunner {
         return false;
     }
 
-	void test1(ADPersonDao dao) {
+	void test1(ADLdapDao dao) {
 		System.out.println("Search All Users:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("objectclass", "person"));
 
-		List<ADLdapPerson> allPerson = dao.getAllPerson(andFilter);
-		for (ADLdapPerson p : allPerson) System.out.println(p.getCn());
+		List<ADLdap> allPerson = dao.getAllPerson(andFilter);
+		for (ADLdap p : allPerson) System.out.println(p.getCn());
 	}
 
-	void test2(ADPersonDao dao) {
+	void test2(ADLdapDao dao) {
 		System.out.println("\nSearch User=user2:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("sAMAccountName", "user2"));
 
-		List<ADLdapPerson> allPerson = dao.getAllPerson(andFilter);
-		for (ADLdapPerson p : allPerson) System.out.println(p.getCn());
+		List<ADLdap> allPerson = dao.getAllPerson(andFilter);
+		for (ADLdap p : allPerson) System.out.println(p.getCn());
 	}
 
-	void test3(ADPersonDao dao) {
+	void test3(ADLdapDao dao) {
 		System.out.println("\nSearch All Groups:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("objectclass", "group"));
 
-		List<ADLdapPerson> allPerson = dao.getAllPerson(andFilter);
-		for (ADLdapPerson p : allPerson) System.out.println(p.getCn());
+		List<ADLdap> allPerson = dao.getAllPerson(andFilter);
+		for (ADLdap p : allPerson) System.out.println(p.getCn());
 	}
 
-	void test4(ADPersonDao dao) {
+	void test4(ADLdapDao dao) {
 		System.out.println("\nSearch Group(s) by User=user1:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("member", "CN=user1,CN=Users,DC=adcts,DC=local"));
 
-		List<ADLdapPerson> allPerson = dao.getAllPerson(andFilter);
-		for (ADLdapPerson p : allPerson) System.out.println(p.getCn());
+		List<ADLdap> allPerson = dao.getAllPerson(andFilter);
+		for (ADLdap p : allPerson) System.out.println(p.getCn());
 	}
 
-	void test5(ADPersonDao dao) {
-		System.out.println("\nSearch Group(s) by User=user4:\n----------------");
-
-		AndFilter andFilter = new AndFilter();
-		andFilter.and(new EqualsFilter("member", "CN=user4,CN=Users,DC=adcts,DC=local"));
-
-		List<ADLdapPerson> allPerson = dao.getAllPerson(andFilter);
-		for (ADLdapPerson p : allPerson) System.out.println(p.getCn());
-	}
-
-	void test6_1(ADPersonDao dao) {
-		System.out.println("\nSearch Group(s) by User=user2 in OU=ctsuser:\n----------------");
+	void test5_1(ADLdapDao dao) {
+		System.out.println("\n* Search Group(s) by User=user2 in OU=ctsuser:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("member", "CN=user2,CN=Users,DC=adcts,DC=local"));
-		List<ADLdapPerson> allPerson = dao.getAllPerson("OU=ctsuser", andFilter);
+		List<ADLdap> allPerson = dao.getAllPerson("OU=ctsuser", andFilter);
 
-		for (ADLdapPerson p : allPerson) System.out.println(p.getCn());
+		for (ADLdap p : allPerson) System.out.println(p.getCn());
 	}
 
-	void test6_2(ADPersonDao dao) {
-		System.out.println("\nSearch Group(s) by User=user2 in OU=Ctsprog:\n----------------");
+	void test5_2(ADLdapDao dao) {
+		System.out.println("\n* Search Group(s) by User=user2 in OU=Ctsprog:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("member", "CN=user2,CN=Users,DC=adcts,DC=local"));
-		List<ADLdapPerson> allPerson = dao.getAllPerson("OU=Ctsprog", andFilter);
+		List<ADLdap> allPerson = dao.getAllPerson("OU=Ctsprog", andFilter);
 
-		for (ADLdapPerson p : allPerson) System.out.println(p.getCn());
+		for (ADLdap p : allPerson) System.out.println(p.getCn());
 	}
 
-	public static void main(String[] args) {
+    void test6(ADLdapDao dao) {
+        System.out.println("\n* Search Group(s) by User=user4 in OU=Ctsprog:\n----------------");
+
+        AndFilter andFilter = new AndFilter();
+        andFilter.and(new EqualsFilter("member", "CN=user4,CN=Users,DC=adcts,DC=local"));
+
+        List<ADLdap> allPerson = dao.getAllPerson("OU=Ctsprog", andFilter);
+        for (ADLdap p : allPerson) System.out.println(p.getCn());
+    }
+
+    public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
