@@ -5,34 +5,34 @@ import java.util.List;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
-import dk.digitalidentity.app.data.LdapPerson;
+import dk.digitalidentity.app.data.ADLdapPerson;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.filter.Filter;
 
-public class PersonRepo {
+public class ADPersonDao {
 	private LdapTemplate ldapTemplate;
 
 	public void setLdapTemplate(LdapTemplate ldapTemplate) {
 		this.ldapTemplate = ldapTemplate;
 	}
 
-	public List<LdapPerson> getAllPerson(Filter filter) {
+	public List<ADLdapPerson> getAllPerson(Filter filter) {
 		return ldapTemplate.search("", filter.encode(), new AttributesMapper() {
 			@Override
-			public LdapPerson mapFromAttributes(Attributes attr) throws NamingException {
-				LdapPerson person = new LdapPerson();
+			public ADLdapPerson mapFromAttributes(Attributes attr) throws NamingException {
+				ADLdapPerson person = new ADLdapPerson();
 				person.setCn((String) attr.get("cn").get());
 				return person;
 			}
 		});
 	}
 
-	public List<LdapPerson> getAllPerson(String base, Filter filter) {
+	public List<ADLdapPerson> getAllPerson(String base, Filter filter) {
 		return ldapTemplate.search(base, filter.encode(), new AttributesMapper() {
 			@Override
-			public LdapPerson mapFromAttributes(Attributes attr) throws NamingException {
-				LdapPerson person = new LdapPerson();
+			public ADLdapPerson mapFromAttributes(Attributes attr) throws NamingException {
+				ADLdapPerson person = new ADLdapPerson();
 				person.setCn((String) attr.get("cn").get());
 				return person;
 			}
