@@ -8,12 +8,13 @@ import org.springframework.ldap.core.support.LdapContextSource;
 @Configuration
 public class ADLdapConfig {
 
+	public static final String URL = "ldap://192.168.1.125:389";
 	public static final String ROOT = "DC=adcts,DC=local";
 
 	@Bean
 	public LdapContextSource adContextSource() {
 		LdapContextSource ldapContextSource = new LdapContextSource();
-		ldapContextSource.setUrl("ldap://192.168.1.125:389");
+		ldapContextSource.setUrl(URL);
 		ldapContextSource.setBase(ROOT);
 //		ldapContextSource.setUserDn("user1@adcts.local");
 //		ldapContextSource.setPassword("Qwerty1");

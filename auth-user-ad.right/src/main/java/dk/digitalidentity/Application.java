@@ -29,11 +29,11 @@ public class Application implements CommandLineRunner {
 		ADPersonDao dao = new ADPersonDao();
 		dao.setLdapTemplate(adLdapTemplate);
 
-		boolean isAuthenticate = authenticate("", "CN=user2", "Qwerty12");
+		boolean isAuthenticate = authenticate("", "user2", "Qwerty12");
 		System.out.println("(user2) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = false
 
-		isAuthenticate = authenticate("", "CN=user2", "Qwerty1");
-		System.out.println("(user2) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = true
+        isAuthenticate = authenticate("", "user1", "Qwerty1");
+		System.out.println("(user1) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = true
 
 		System.out.println("|||||||||||||||||||||||||||");
 		if (isAuthenticate) {
@@ -73,16 +73,16 @@ public class Application implements CommandLineRunner {
         return userDn.toString();
     }
 
-	boolean authenticate(String base, String filter, String password) {
-		try {
-			LdapContextSource ldapContextSource = (LdapContextSource) adLdapTemplate.getContextSource();
-			ldapContextSource.setUserDn("user1@adcts.local");
-			ldapContextSource.setPassword(password);
-			adLdapTemplate.setContextSource(ldapContextSource);
-			return adLdapTemplate.authenticate(base, filter, password);
-		} catch (AuthenticationException ae) { }
-		return false;
-	}
+    boolean authenticate(String base, String userName, String password) {
+        try {
+            LdapContextSource ldapContextSource = (LdapContextSource) adLdapTemplate.getContextSource();
+            ldapContextSource.setUserDn( getUserDn(userName, ADLdapConfig.ROOT) );
+            ldapContextSource.setPassword(password);
+            adLdapTemplate.setContextSource(ldapContextSource);
+            return adLdapTemplate.authenticate(base, "CN=" + userName, password);
+        } catch (AuthenticationException ae) { }
+        return false;
+    }
 
 	void test1(ADPersonDao dao) {
 		System.out.println("Search All Users:\n----------------");
