@@ -3,160 +3,126 @@ package dk.digitalidentity;
 import java.util.List;
 
 import dk.digitalidentity.app.config.ADLdapConfig;
-import org.apache.commons.lang3.StringUtils;
+import dk.digitalidentity.app.service.ADLdapService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.ldap.AuthenticationException;
-import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
 
 import dk.digitalidentity.app.data.ADLdap;
-import dk.digitalidentity.app.dao.ADLdapDao;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
 	@Autowired
-	@Qualifier("adLdapTemplate")
-	LdapTemplate adLdapTemplate;
+    private ADLdapService adLdapService;
 
     public void run(String... args) {
-		ADLdapDao dao = new ADLdapDao();
-		dao.setLdapTemplate(adLdapTemplate);
-
-		boolean isAuthenticate = authenticate("", "user2", "Qwerty12");
+        boolean isAuthenticate = adLdapService.authenticate("", "user2", "Qwerty12");
 		System.out.println("(user2) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = false
 
-        isAuthenticate = authenticate("", "user1", "Qwerty1");
+        isAuthenticate = adLdapService.authenticate("", "user1", "Qwerty1");
 		System.out.println("(user1) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = true
 
 		System.out.println("|||||||||||||||||||||||||||");
 		if (isAuthenticate) {
-			test1(dao);
+			test1();
 
-			test2(dao);
+			test2();
 
-			test3(dao);
+			test3();
 
-			test4(dao);
+			test4();
 
-            test5_1(dao);
+            test5_1();
 
-            test5_2(dao);
+            test5_2();
 
-			test6(dao);
+			test6();
 		}
 		System.out.println("|||||||||||||||||||||||||||");
 
-////        String ROOT = "";                            //TODO:  user1
-////        String ROOT = "DC=adcts";                    //TODO:  user1@adcts
-//        String ROOT = "DC=adcts,DC=local";           //TODO:  user1@adcts.local
-////        String ROOT = "DC=blabla,DC=adcts,DC=local"; //TODO:  user1@blabla.adcts.local
+////        String ROOT_DIR = "";                            //TODO:  user1
+////        String ROOT_DIR = "DC=adcts";                    //TODO:  user1@adcts
+//        String ROOT_DIR = "DC=adcts,DC=local";           //TODO:  user1@adcts.local
+////        String ROOT_DIR = "DC=blabla,DC=adcts,DC=local"; //TODO:  user1@blabla.adcts.local
 //
-//        System.out.println("UserDn = " + getUserDn("user1", ADLdapConfig.ROOT));
+//        System.out.println("UserDn = " + getUserDn("user1", ADLdapConfig.ROOT_DIR));
 	}
 
-    private String getUserDn(final String userName, final String root) {
-        StringBuilder userDn = new StringBuilder(userName);
-        if (StringUtils.isNotBlank(root)) {
-            userDn.append("@");
-            String[] rootKeyVals = root.replace(" ", "").split(",");
-            for (int i = 0; i < rootKeyVals.length; i++) {
-                String[] keyVal = rootKeyVals[i].split("=", 2);
-                if (StringUtils.isNotBlank(keyVal[1])) userDn.append(((i+1) == rootKeyVals.length) ? keyVal[1] : keyVal[1] + ".");
-            }
-        }
-        return userDn.toString();
-    }
-
-    boolean authenticate(String base, String userName, String password) {
-        try {
-            LdapContextSource ldapContextSource = (LdapContextSource) adLdapTemplate.getContextSource();
-            ldapContextSource.setUserDn( getUserDn(userName, ADLdapConfig.ROOT) );
-            ldapContextSource.setPassword(password);
-            adLdapTemplate.setContextSource(ldapContextSource);
-            return adLdapTemplate.authenticate(base, "CN=" + userName, password);
-        } catch (AuthenticationException ae) { }
-        return false;
-    }
-
-	void test1(ADLdapDao dao) {
+	void test1() {
 		System.out.println("1) Search All Users:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("objectclass", "person"));
 
-		List<ADLdap> persons = dao.getAll(andFilter);
+        List<ADLdap> persons = adLdapService.getAll(andFilter);
 		for (ADLdap person : persons) System.out.println(person.getCn());
 	}
 
-	void test2(ADLdapDao dao) {
+	void test2() {
 		System.out.println("\n2) Search User=user2:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("sAMAccountName", "user2"));
 
-		List<ADLdap> persons = dao.getAll(andFilter);
+        List<ADLdap> persons = adLdapService.getAll(andFilter);
 		for (ADLdap person : persons) System.out.println(person.getCn());
 	}
 
-	void test3(ADLdapDao dao) {
+	void test3() {
 		System.out.println("\n3) Search All Groups:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("objectclass", "group"));
 
-		List<ADLdap> groups = dao.getAll(andFilter);
+        List<ADLdap> groups = adLdapService.getAll(andFilter);
 		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
-	void test4(ADLdapDao dao) {
+	void test4() {
 		System.out.println("\n4) Search Group(s) by User=user1:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("member", "CN=user1,CN=Users,DC=adcts,DC=local"));
 
-		List<ADLdap> groups = dao.getAll(andFilter);
+        List<ADLdap> groups = adLdapService.getAll(andFilter);
 		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
-	void test5_1(ADLdapDao dao) {
+	void test5_1() {
 		System.out.println("\n5.1) * Search Group(s) by User=user2 in OU=ctsuser:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("member", "CN=user2,CN=Users,DC=adcts,DC=local"));
 
-		List<ADLdap> groups = dao.getAll(ADLdapConfig.ROLE_2, andFilter);
+        List<ADLdap> groups = adLdapService.getAll(ADLdapConfig.ROLE_NAME2, andFilter);
 		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
-	void test5_2(ADLdapDao dao) {
+	void test5_2() {
 		System.out.println("\n5.2) * Search Group(s) by User=user2 in OU=Ctsprog:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("member", "CN=user2,CN=Users,DC=adcts,DC=local"));
 
-		List<ADLdap> groups = dao.getAll(ADLdapConfig.ROLE_1, andFilter);
+        List<ADLdap> groups = adLdapService.getAll(ADLdapConfig.ROLE_NAME1, andFilter);
 		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
-    void test6(ADLdapDao dao) {
+    void test6() {
         System.out.println("\n6) * Search Group(s) by User=user4 in OU=Ctsprog:\n----------------");
 
         AndFilter andFilter = new AndFilter();
         andFilter.and(new EqualsFilter("member", "CN=user4,CN=Users,DC=adcts,DC=local"));
 
-        List<ADLdap> groups = dao.getAll(ADLdapConfig.ROLE_1, andFilter);
+        List<ADLdap> groups = adLdapService.getAll(ADLdapConfig.ROLE_NAME1, andFilter);
         for (ADLdap group : groups) System.out.println(group.getCn());
     }
 
     public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
-
 }

@@ -9,15 +9,15 @@ import org.springframework.ldap.core.support.LdapContextSource;
 public class ADLdapConfig {
 
 	public static final String URL = "ldap://192.168.1.125:389";
-	public static final String ROOT = "DC=adcts,DC=local";
-	public static final String ROLE_1 = "OU=Ctsprog";
-    public static final String ROLE_2 = "OU=ctsuser";
+	public static final String ROOT_DIR = "DC=adcts,DC=local";
+	public static final String ROLE_NAME1 = "OU=Ctsprog";
+    public static final String ROLE_NAME2 = "OU=ctsuser";
 
 	@Bean
 	public LdapContextSource adContextSource() {
 		LdapContextSource ldapContextSource = new LdapContextSource();
 		ldapContextSource.setUrl(URL);
-		ldapContextSource.setBase(ROOT);
+		ldapContextSource.setBase(ROOT_DIR);
 //		ldapContextSource.setUserDn("user1@adcts.local");
 //		ldapContextSource.setPassword("Qwerty1");
 		return ldapContextSource;
