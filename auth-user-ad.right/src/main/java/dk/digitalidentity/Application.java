@@ -1,7 +1,6 @@
 package dk.digitalidentity;
 
 import dk.digitalidentity.app.config.ADLdapConfig;
-import dk.digitalidentity.app.service.ADLdapService;
 import dk.digitalidentity.provider.ADLdapProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -14,19 +13,16 @@ import dk.digitalidentity.app.data.ADLdap;
 public class Application implements CommandLineRunner {
 
 	@Autowired
-    private ADLdapService adLdapService;
-
-	@Autowired
 	private ADLdapProvider adLdapProvider;
 
     public void run(String... args) {
-        boolean isAuthenticate = adLdapService.authenticate("", "user2", "Qwerty12");
+        boolean isAuthenticate = adLdapProvider.authenticate("", "user2", "Qwerty12");
 		System.out.println("(user2) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = false     LDAP: error code 49 - comment: AcceptSecurityContext error, data 52e
 
-		isAuthenticate = adLdapService.authenticate("CN=Users2", "user1", "Qwerty1");
+		isAuthenticate = adLdapProvider.authenticate("CN=Users2", "user1", "Qwerty1");
 		System.out.println("(user1 in CN=Users2) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = false     LDAP: error code 32 - problem 2001 (NO_OBJECT)
 
-		isAuthenticate = adLdapService.authenticate(ADLdapConfig.BASE_USERDIR, "user1", "Qwerty1");
+		isAuthenticate = adLdapProvider.authenticate(ADLdapConfig.BASE_USERDIR, "user1", "Qwerty1");
 		System.out.println("(user1 in " + ADLdapConfig.BASE_USERDIR + ") AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = true
 
 		System.out.println("|||||||||||||||||||||||||||");

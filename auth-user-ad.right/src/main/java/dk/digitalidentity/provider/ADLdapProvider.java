@@ -16,6 +16,10 @@ public class ADLdapProvider {
     @Autowired
     private ADLdapService adLdapService;
 
+    public boolean authenticate(String base, String userName, String password) {
+        return adLdapService.authenticate(base, userName, password);
+    }
+
     @Deprecated
     public List<ADLdap> allUsers() {
         AndFilter andFilter = new AndFilter();
