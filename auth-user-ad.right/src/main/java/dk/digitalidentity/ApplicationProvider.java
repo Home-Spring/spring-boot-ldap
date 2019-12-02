@@ -101,7 +101,7 @@ public class ApplicationProvider implements CommandLineRunner {
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("member", "CN=" + userName + "," + ADLdapConfig.BASE_USERDIR + "," + ADLdapConfig.ROOT_DIR));
 
-        List<ADLdap> groups = adLdapService.getAll(ADLdapConfig.ROLE_NAME2, andFilter);
+        List<ADLdap> groups = adLdapService.getAll(ADLdapConfig.ROLE_NAMES2, andFilter);
 		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
@@ -111,7 +111,7 @@ public class ApplicationProvider implements CommandLineRunner {
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("member", "CN=" + userName + "," + ADLdapConfig.BASE_USERDIR + "," + ADLdapConfig.ROOT_DIR));
 
-        List<ADLdap> groups = adLdapService.getAll(ADLdapConfig.ROLE_NAME1, andFilter);
+        List<ADLdap> groups = adLdapService.getAll(ADLdapConfig.ROLE_NAMES1, andFilter);
 		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
@@ -121,7 +121,7 @@ public class ApplicationProvider implements CommandLineRunner {
         AndFilter andFilter = new AndFilter();
         andFilter.and(new EqualsFilter("member", "CN=" + userName + "," + ADLdapConfig.BASE_USERDIR + "," + ADLdapConfig.ROOT_DIR));
 
-        List<ADLdap> groups = adLdapService.getAll(ADLdapConfig.ROLE_NAME1, andFilter);
+        List<ADLdap> groups = adLdapService.getAll(ADLdapConfig.ROLE_NAMES1, andFilter);
         for (ADLdap group : groups) System.out.println(group.getCn());
     }
 
