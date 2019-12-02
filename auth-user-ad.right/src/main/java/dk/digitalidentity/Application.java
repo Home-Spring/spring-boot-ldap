@@ -86,73 +86,73 @@ public class Application implements CommandLineRunner {
     }
 
 	void test1(ADLdapDao dao) {
-		System.out.println("Search All Users:\n----------------");
+		System.out.println("1) Search All Users:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("objectclass", "person"));
 
-		List<ADLdap> allPerson = dao.getAllPerson(andFilter);
-		for (ADLdap p : allPerson) System.out.println(p.getCn());
+		List<ADLdap> persons = dao.getAll(andFilter);
+		for (ADLdap person : persons) System.out.println(person.getCn());
 	}
 
 	void test2(ADLdapDao dao) {
-		System.out.println("\nSearch User=user2:\n----------------");
+		System.out.println("\n2) Search User=user2:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("sAMAccountName", "user2"));
 
-		List<ADLdap> allPerson = dao.getAllPerson(andFilter);
-		for (ADLdap p : allPerson) System.out.println(p.getCn());
+		List<ADLdap> persons = dao.getAll(andFilter);
+		for (ADLdap person : persons) System.out.println(person.getCn());
 	}
 
 	void test3(ADLdapDao dao) {
-		System.out.println("\nSearch All Groups:\n----------------");
+		System.out.println("\n3) Search All Groups:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("objectclass", "group"));
 
-		List<ADLdap> allPerson = dao.getAllPerson(andFilter);
-		for (ADLdap p : allPerson) System.out.println(p.getCn());
+		List<ADLdap> groups = dao.getAll(andFilter);
+		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
 	void test4(ADLdapDao dao) {
-		System.out.println("\nSearch Group(s) by User=user1:\n----------------");
+		System.out.println("\n4) Search Group(s) by User=user1:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("member", "CN=user1,CN=Users,DC=adcts,DC=local"));
 
-		List<ADLdap> allPerson = dao.getAllPerson(andFilter);
-		for (ADLdap p : allPerson) System.out.println(p.getCn());
+		List<ADLdap> groups = dao.getAll(andFilter);
+		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
 	void test5_1(ADLdapDao dao) {
-		System.out.println("\n* Search Group(s) by User=user2 in OU=ctsuser:\n----------------");
+		System.out.println("\n5.1) * Search Group(s) by User=user2 in OU=ctsuser:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("member", "CN=user2,CN=Users,DC=adcts,DC=local"));
-		List<ADLdap> allPerson = dao.getAllPerson(ADLdapConfig.ROLE_1, andFilter);
 
-		for (ADLdap p : allPerson) System.out.println(p.getCn());
+		List<ADLdap> groups = dao.getAll(ADLdapConfig.ROLE_2, andFilter);
+		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
 	void test5_2(ADLdapDao dao) {
-		System.out.println("\n* Search Group(s) by User=user2 in OU=Ctsprog:\n----------------");
+		System.out.println("\n5.2) * Search Group(s) by User=user2 in OU=Ctsprog:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("member", "CN=user2,CN=Users,DC=adcts,DC=local"));
-		List<ADLdap> allPerson = dao.getAllPerson(ADLdapConfig.ROLE_2, andFilter);
 
-		for (ADLdap p : allPerson) System.out.println(p.getCn());
+		List<ADLdap> groups = dao.getAll(ADLdapConfig.ROLE_1, andFilter);
+		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
     void test6(ADLdapDao dao) {
-        System.out.println("\n* Search Group(s) by User=user4 in OU=Ctsprog:\n----------------");
+        System.out.println("\n6) * Search Group(s) by User=user4 in OU=Ctsprog:\n----------------");
 
         AndFilter andFilter = new AndFilter();
         andFilter.and(new EqualsFilter("member", "CN=user4,CN=Users,DC=adcts,DC=local"));
 
-        List<ADLdap> allPerson = dao.getAllPerson(ADLdapConfig.ROLE_2, andFilter);
-        for (ADLdap p : allPerson) System.out.println(p.getCn());
+        List<ADLdap> groups = dao.getAll(ADLdapConfig.ROLE_1, andFilter);
+        for (ADLdap group : groups) System.out.println(group.getCn());
     }
 
     public static void main(String[] args) {

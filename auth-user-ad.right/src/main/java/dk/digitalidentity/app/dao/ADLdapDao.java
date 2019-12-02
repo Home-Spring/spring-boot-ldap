@@ -17,7 +17,7 @@ public class ADLdapDao {
 		this.ldapTemplate = ldapTemplate;
 	}
 
-	public List<ADLdap> getAllPerson(String base, Filter filter) {
+	public List<ADLdap> getAll(String base, Filter filter) {
 		return ldapTemplate.search(base, filter.encode(), new AttributesMapper() {
 			@Override
 			public ADLdap mapFromAttributes(Attributes attr) throws NamingException {
@@ -29,7 +29,7 @@ public class ADLdapDao {
 	}
 
 	@Deprecated
-	public List<ADLdap> getAllPerson(Filter filter) {
+	public List<ADLdap> getAll(Filter filter) {
 		return ldapTemplate.search("", filter.encode(), new AttributesMapper() {
 			@Override
 			public ADLdap mapFromAttributes(Attributes attr) throws NamingException {
