@@ -34,7 +34,7 @@ public class ADLdapService {
     public boolean authenticate(String base, String userName, String password) {
         try {
             LdapContextSource ldapContextSource = (LdapContextSource) adLdapTemplate.getContextSource();
-            ldapContextSource.setUserDn( getUserDn(userName, ADLdapConfig.ROOT_DIR) );
+            ldapContextSource.setUserDn( getUserDn(userName,ADLdapConfig.ROOT_DIR) );
             ldapContextSource.setPassword(password);
             adLdapTemplate.setContextSource(ldapContextSource);
             return adLdapTemplate.authenticate(base, "CN=" + userName, password);
