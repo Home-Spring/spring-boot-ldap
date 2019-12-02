@@ -17,6 +17,7 @@ public class ADPersonDao {
 		this.ldapTemplate = ldapTemplate;
 	}
 
+	@Deprecated
 	public List<ADLdapPerson> getAllPerson(Filter filter) {
 		return ldapTemplate.search("", filter.encode(), new AttributesMapper() {
 			@Override

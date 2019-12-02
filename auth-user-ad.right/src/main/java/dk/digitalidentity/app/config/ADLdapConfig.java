@@ -8,18 +8,20 @@ import org.springframework.ldap.core.support.LdapContextSource;
 @Configuration
 public class ADLdapConfig {
 
+	public static final String ROOT = "DC=adcts,DC=local";
+
 	@Bean
-	public LdapContextSource adContextSource() throws Exception{
+	public LdapContextSource adContextSource() {
 		LdapContextSource ldapContextSource = new LdapContextSource();
 		ldapContextSource.setUrl("ldap://192.168.1.125:389");
-		ldapContextSource.setBase("dc=adcts,dc=local");
+		ldapContextSource.setBase(ROOT);
 //		ldapContextSource.setUserDn("user1@adcts.local");
 //		ldapContextSource.setPassword("Qwerty1");
 		return ldapContextSource;
 	}
-	
+
 	@Bean(name = "adLdapTemplate")
-	public LdapTemplate adLdapTemplate() throws Exception{
+	public LdapTemplate adLdapTemplate() {
 		LdapTemplate ldapTemplate = new LdapTemplate(adContextSource());
 		ldapTemplate.setIgnorePartialResultException(true);
 		ldapTemplate.setContextSource(adContextSource());

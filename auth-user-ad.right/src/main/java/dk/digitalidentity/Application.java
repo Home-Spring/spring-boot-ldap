@@ -2,6 +2,8 @@ package dk.digitalidentity;
 
 import java.util.List;
 
+import dk.digitalidentity.app.config.ADLdapConfig;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
@@ -23,7 +25,7 @@ public class Application implements CommandLineRunner {
 	@Qualifier("adLdapTemplate")
 	LdapTemplate adLdapTemplate;
 
-	public void run(String... args) {
+    public void run(String... args) {
 		ADPersonDao dao = new ADPersonDao();
 		dao.setLdapTemplate(adLdapTemplate);
 
@@ -49,7 +51,27 @@ public class Application implements CommandLineRunner {
 			test6_2(dao);
 		}
 		System.out.println("|||||||||||||||||||||||||||");
+
+////        String ROOT = "";                            //TODO:  user1
+////        String ROOT = "DC=adcts";                    //TODO:  user1@adcts
+//        String ROOT = "DC=adcts,DC=local";           //TODO:  user1@adcts.local
+////        String ROOT = "DC=blabla,DC=adcts,DC=local"; //TODO:  user1@blabla.adcts.local
+//
+//        System.out.println("UserDn = " + getUserDn("user1", ADLdapConfig.ROOT));
 	}
+
+    private String getUserDn(final String userName, final String root) {
+        StringBuilder userDn = new StringBuilder(userName);
+        if (StringUtils.isNotBlank(root)) {
+            userDn.append("@");
+            String[] rootKeyVals = root.replace(" ", "").split(",");
+            for (int i = 0; i < rootKeyVals.length; i++) {
+                String[] keyVal = rootKeyVals[i].split("=", 2);
+                if (StringUtils.isNotBlank(keyVal[1])) userDn.append(((i+1) == rootKeyVals.length) ? keyVal[1] : keyVal[1] + ".");
+            }
+        }
+        return userDn.toString();
+    }
 
 	boolean authenticate(String base, String filter, String password) {
 		try {
