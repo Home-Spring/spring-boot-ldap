@@ -14,33 +14,36 @@ import org.springframework.ldap.filter.EqualsFilter;
 import dk.digitalidentity.app.data.ADLdap;
 
 @SpringBootApplication
-public class Application implements CommandLineRunner {
+public class ApplicationProvider implements CommandLineRunner {
 
 	@Autowired
     private ADLdapService adLdapService;
 
     public void run(String... args) {
         boolean isAuthenticate = adLdapService.authenticate("", "user2", "Qwerty12");
-		System.out.println("(user2) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = false
+		System.out.println("(user2) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = false     LDAP: error code 49 - comment: AcceptSecurityContext error, data 52e
 
-        isAuthenticate = adLdapService.authenticate("", "user1", "Qwerty1");
-		System.out.println("(user1) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = true
+		isAuthenticate = adLdapService.authenticate("CN=Users2", "user1", "Qwerty1");
+		System.out.println("(user1 in CN=Users2) AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = false     LDAP: error code 32 - problem 2001 (NO_OBJECT)
+
+		isAuthenticate = adLdapService.authenticate(ADLdapConfig.BASE_USERDIR, "user1", "Qwerty1");
+		System.out.println("(user1 in " + ADLdapConfig.BASE_USERDIR + ") AUTHENTICATE: " + isAuthenticate); //TODO:  authenticate = true
 
 		System.out.println("|||||||||||||||||||||||||||");
 		if (isAuthenticate) {
 			test1();
 
-			test2();
+			test2("user2");
 
 			test3();
 
 			test4();
 
-            test5_1();
+            test5_1("user2");
 
-            test5_2();
+            test5_2("user2");
 
-			test6();
+			test6("user4");
 		}
 		System.out.println("|||||||||||||||||||||||||||");
 
@@ -62,11 +65,11 @@ public class Application implements CommandLineRunner {
 		for (ADLdap person : persons) System.out.println(person.getCn());
 	}
 
-	void test2() {
+	void test2(String userName) {
 		System.out.println("\n2) Search User=user2:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
-		andFilter.and(new EqualsFilter("sAMAccountName", "user2"));
+		andFilter.and(new EqualsFilter("sAMAccountName", userName));
 
         List<ADLdap> persons = adLdapService.getAll(andFilter);
 		for (ADLdap person : persons) System.out.println(person.getCn());
@@ -86,43 +89,43 @@ public class Application implements CommandLineRunner {
 		System.out.println("\n4) Search Group(s) by User=user1:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
-		andFilter.and(new EqualsFilter("member", "CN=user1,CN=Users,DC=adcts,DC=local"));
+		andFilter.and(new EqualsFilter("member", "CN=user1," + ADLdapConfig.BASE_USERDIR + "," + ADLdapConfig.ROOT_DIR));
 
         List<ADLdap> groups = adLdapService.getAll(andFilter);
 		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
-	void test5_1() {
+	void test5_1(String userName) {
 		System.out.println("\n5.1) * Search Group(s) by User=user2 in OU=ctsuser:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
-		andFilter.and(new EqualsFilter("member", "CN=user2,CN=Users,DC=adcts,DC=local"));
+		andFilter.and(new EqualsFilter("member", "CN=" + userName + "," + ADLdapConfig.BASE_USERDIR + "," + ADLdapConfig.ROOT_DIR));
 
         List<ADLdap> groups = adLdapService.getAll(ADLdapConfig.ROLE_NAME2, andFilter);
 		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
-	void test5_2() {
+	void test5_2(String userName) {
 		System.out.println("\n5.2) * Search Group(s) by User=user2 in OU=Ctsprog:\n----------------");
 
 		AndFilter andFilter = new AndFilter();
-		andFilter.and(new EqualsFilter("member", "CN=user2,CN=Users,DC=adcts,DC=local"));
+		andFilter.and(new EqualsFilter("member", "CN=" + userName + "," + ADLdapConfig.BASE_USERDIR + "," + ADLdapConfig.ROOT_DIR));
 
         List<ADLdap> groups = adLdapService.getAll(ADLdapConfig.ROLE_NAME1, andFilter);
 		for (ADLdap group : groups) System.out.println(group.getCn());
 	}
 
-    void test6() {
+    void test6(String userName) {
         System.out.println("\n6) * Search Group(s) by User=user4 in OU=Ctsprog:\n----------------");
 
         AndFilter andFilter = new AndFilter();
-        andFilter.and(new EqualsFilter("member", "CN=user4,CN=Users,DC=adcts,DC=local"));
+        andFilter.and(new EqualsFilter("member", "CN=" + userName + "," + ADLdapConfig.BASE_USERDIR + "," + ADLdapConfig.ROOT_DIR));
 
         List<ADLdap> groups = adLdapService.getAll(ADLdapConfig.ROLE_NAME1, andFilter);
         for (ADLdap group : groups) System.out.println(group.getCn());
     }
 
     public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(ApplicationProvider.class, args);
 	}
 }

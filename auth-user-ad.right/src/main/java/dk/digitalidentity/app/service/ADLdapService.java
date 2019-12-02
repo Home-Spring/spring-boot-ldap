@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ldap.AuthenticationException;
+import org.springframework.ldap.NameNotFoundException;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.ldap.filter.Filter;
@@ -37,7 +38,11 @@ public class ADLdapService {
             ldapContextSource.setPassword(password);
             adLdapTemplate.setContextSource(ldapContextSource);
             return adLdapTemplate.authenticate(base, "CN=" + userName, password);
-        } catch (AuthenticationException ae) { }
+        } catch (AuthenticationException ae) {
+            System.err.println(ae.getLocalizedMessage());
+        } catch (NameNotFoundException nnfe) {
+            System.err.println(nnfe.getLocalizedMessage());
+        }
         return false;
     }
 
