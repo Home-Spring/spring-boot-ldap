@@ -130,7 +130,7 @@ public class Application implements CommandLineRunner {
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("member", "CN=user2,CN=Users,DC=adcts,DC=local"));
-		List<ADLdap> allPerson = dao.getAllPerson("OU=ctsuser", andFilter);
+		List<ADLdap> allPerson = dao.getAllPerson(ADLdapConfig.ROLE_1, andFilter);
 
 		for (ADLdap p : allPerson) System.out.println(p.getCn());
 	}
@@ -140,7 +140,7 @@ public class Application implements CommandLineRunner {
 
 		AndFilter andFilter = new AndFilter();
 		andFilter.and(new EqualsFilter("member", "CN=user2,CN=Users,DC=adcts,DC=local"));
-		List<ADLdap> allPerson = dao.getAllPerson("OU=Ctsprog", andFilter);
+		List<ADLdap> allPerson = dao.getAllPerson(ADLdapConfig.ROLE_2, andFilter);
 
 		for (ADLdap p : allPerson) System.out.println(p.getCn());
 	}
@@ -151,7 +151,7 @@ public class Application implements CommandLineRunner {
         AndFilter andFilter = new AndFilter();
         andFilter.and(new EqualsFilter("member", "CN=user4,CN=Users,DC=adcts,DC=local"));
 
-        List<ADLdap> allPerson = dao.getAllPerson("OU=Ctsprog", andFilter);
+        List<ADLdap> allPerson = dao.getAllPerson(ADLdapConfig.ROLE_2, andFilter);
         for (ADLdap p : allPerson) System.out.println(p.getCn());
     }
 

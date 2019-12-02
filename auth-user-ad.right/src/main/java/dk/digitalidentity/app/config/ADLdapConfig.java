@@ -10,6 +10,8 @@ public class ADLdapConfig {
 
 	public static final String URL = "ldap://192.168.1.125:389";
 	public static final String ROOT = "DC=adcts,DC=local";
+    public static final String ROLE_1 = "OU=ctsuser";
+    public static final String ROLE_2 = "OU=Ctsprog";
 
 	@Bean
 	public LdapContextSource adContextSource() {
