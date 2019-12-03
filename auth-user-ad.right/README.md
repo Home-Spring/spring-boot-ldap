@@ -9,8 +9,13 @@
 * [Spring LDAP Обзор](https://www.codeflow.site/ru/article/spring-ldap)
 * [Integrate LDAP and Active Directory (AD)](https://auth0.com/blog/using-ldap-with-c-sharp/)
 * [Spring boot - security java config - LDAP](https://coderanch.com/t/653961/frameworks/Spring-boot-security-java-config)
+* [Таблица основных пользовательских атрибутов Active Directory](https://notessysadmin.com/main-attributes-active-directory)
 
 * [Active Directory spring-boot Docs](https://github.com/dm-drogeriemarkt/activedirectory-spring-boot-starter)
+
+![1](Screenshot-1.png)
+
+![2](Screenshot-2.png)
 
 ---
 
