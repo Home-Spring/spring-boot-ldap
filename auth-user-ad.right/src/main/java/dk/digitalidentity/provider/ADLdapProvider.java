@@ -1,6 +1,7 @@
 package dk.digitalidentity.provider;
 
-import dk.digitalidentity.app.config.ADLdapConfig;
+//import dk.digitalidentity.app.config.ADLdapConfig;
+import dk.digitalidentity.app.config.ADLdapConfig2;
 import dk.digitalidentity.app.data.ADLdap;
 import dk.digitalidentity.app.service.ADLdapService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,14 +44,16 @@ public class ADLdapProvider {
 
     public List<ADLdap> findGroups(String userName, String baseUserDir, String roleNames) {
         AndFilter filter = new AndFilter();
-        filter.and(new EqualsFilter("member", "CN=" + userName + "," + baseUserDir + "," + ADLdapConfig.ROOT_DIR));
+//        filter.and(new EqualsFilter("member", "CN=" + userName + "," + baseUserDir + "," + ADLdapConfig.ROOT_DIR));
+        filter.and(new EqualsFilter("member", "CN=" + userName + "," + baseUserDir + "," + ADLdapConfig2.ROOT_DIR));
         return adLdapService.getAll(roleNames, filter);
     }
 
     @Deprecated
     public List<ADLdap> findGroups(String userName, String baseUserDir) {
         AndFilter filter = new AndFilter();
-        filter.and(new EqualsFilter("member", "CN=" + userName + "," + baseUserDir + "," + ADLdapConfig.ROOT_DIR));
+//        filter.and(new EqualsFilter("member", "CN=" + userName + "," + baseUserDir + "," + ADLdapConfig.ROOT_DIR));
+        filter.and(new EqualsFilter("member", "CN=" + userName + "," + baseUserDir + "," + ADLdapConfig2.ROOT_DIR));
         return adLdapService.getAll(filter);
     }
 }
